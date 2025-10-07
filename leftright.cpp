@@ -85,7 +85,7 @@ void saveToCSV(const std::map<Party, int>& scores, Party prediction, Party userL
 int main() {
     std::vector<Question> survey = {
         {
-            "What is your stance on universal healthcare?",
+            "Should we have universal healthcare?",
             {"Strongly support", "Somewhat support", "Neutral", "Oppose"},
             {
                 {{DEMOCRAT, 2}, {GREEN, 2}},
@@ -95,7 +95,7 @@ int main() {
             }
         },
         {
-            "What is your view on gun ownership?",
+            "What is gun ownership in your eyes?",
             {"Ban most guns", "Stricter regulations", "Keep laws as-is", "Loosen regulations"},
             {
                 {{DEMOCRAT, 2}, {GREEN, 1}},
@@ -125,7 +125,7 @@ int main() {
             }
         },
         {
-            "What is your view on immigration?",
+            "What does immigration look like for you?",
             {"Open borders", "Pathway to citizenship", "Strict enforcement", "Build a wall"},
             {
                 {{GREEN, 2}, {DEMOCRAT, 2}},
@@ -145,7 +145,7 @@ int main() {
             }
         },
         {
-            "What is your stance on public education funding?",
+            "How do you feel about public education funding?",
             {"Increase funding", "Maintain current levels", "Reduce funding", "Privatize education"},
             {
                 {{DEMOCRAT, 2}, {GREEN, 2}},
@@ -165,7 +165,7 @@ int main() {
             }
         },
         {
-            "What is your opinion on military spending?",
+            "What do you think about military spending?",
             {"Increase significantly", "Maintain current levels", "Reduce spending", "Abolish military"},
             {
                 {{REPUBLICAN, 2}},
@@ -204,11 +204,11 @@ int main() {
         if (std::cin.fail() || choice < 1 || choice > static_cast<int>(survey[i].options.size())) {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
-            std::cout << "Invalid input. Skipping question.\n";
+            std::cout << "Invalid input.\n";
             continue;
         }
 
-		// Update scores based on choice
+	
         const auto& scores = survey[i].optionScores[choice - 1];
         for (const auto& pair : scores) {
             partyScores[pair.first] += pair.second;
@@ -224,7 +224,7 @@ int main() {
     std::cout << "\nFinal prediction: " << partyToString(finalGuess) << "\n";
 
     // Ask user to label themselves
-    std::cout << "\n**********This labeled response will serve as training data for your model.**********";
+    std::cout << "\n**********This labeled response will serve as training data the model.**********";
     std::cout << "\nHow do you currently identify politically?\n";
     std::cout << "1. Democrat\n2. Republican\n3. Libertarian\n4. Green\n5. Other / Prefer not to say\n";
     std::cout << "Your choice (1-5): ";
@@ -232,7 +232,7 @@ int main() {
     int labelChoice;
     std::cin >> labelChoice;
 
-	// Map user input to Party enum
+	// Mapping user input to Party 
     Party userLabel = UNKNOWN;
     switch (labelChoice) {
     case 1: userLabel = DEMOCRAT; break;
@@ -242,10 +242,10 @@ int main() {
     default: userLabel = UNKNOWN; break;
     }
 
-	// Save to CSV
+	// Save to CSV File
     saveToCSV(partyScores, finalGuess, userLabel, "responses.csv");
 
-	// END
+	// END of my program
     std::cout << "\nThank you! Your responses have been recorded in 'responses.csv'.\n";
     return 0;
 }

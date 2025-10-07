@@ -3,36 +3,36 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-# Load the dataset
-df = pd.read_csv("responses.csv")
+# This will load the data
+data = pd.read_csv("responses.csv")
 
-# Map party labels to numeric values
-party_map = {"Democrat": 0, "Republican": 1, "Libertarian": 2, "Green": 3, "Unknown": 4}
-df["UserLabel"] = df["UserLabel"].map(party_map)
+# Party numbers
+party_names = {"Democrat": 0, "Republican": 1, "Libertarian": 2, "Green": 3, "Unknown": 4}
+data["UserLabel"] = data["UserLabel"].map(party_names)
 
-# Features and target
-X = df[["Democrat", "Republican", "Libertarian", "Green"]]
-y = df["UserLabel"]
+# Feat and tar
+X = data[["Democrat", "Republican", "Libertarian", "Green"]]
+y = data["UserLabel"]
 
-# Split into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Split into training and testing things
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-# Train the Random Forest classifier
-model = RandomForestClassifier(random_state=42)
+# Make and train it
+model = RandomForestClassifier()
 model.fit(X_train, y_train)
 
-# Make predictions
-y_pred = model.predict(X_test)
+# testy test
+predictions = model.predict(X_test)
 
-# Evaluate the model
-accuracy = accuracy_score(y_test, y_pred)
-precision = precision_score(y_test, y_pred, average="weighted", zero_division=0)
-recall = recall_score(y_test, y_pred, average="weighted", zero_division=0)
-f1 = f1_score(y_test, y_pred, average="weighted", zero_division=0)
+# How we doing?
+acc = accuracy_score(y_test, predictions)
+prec = precision_score(y_test, predictions, average="weighted", zero_division=0)
+rec = recall_score(y_test, predictions, average="weighted", zero_division=0)
+f1 = f1_score(y_test, predictions, average="weighted", zero_division=0)
 
-# Print evaluation metrics
-print("Model Evaluation Metrics:")
-print(f"Accuracy : {accuracy:.2f}")
-print(f"Precision: {precision:.2f}")
-print(f"Recall   : {recall:.2f}")
-print(f"F1 Score : {f1:.2f}")
+# Printing
+print("How good is the model?")
+print("Quize Accuracy:", round(acc, 2))
+print("Quize Precision:", round(prec, 2))
+print("Quize Recall:", round(rec, 2))
+print("Quize F1 Score:", round(f1, 2))

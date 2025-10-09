@@ -130,6 +130,7 @@
     <ClCompile Include="leftright.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="predict.py" />
     <None Include="README.md" />
     <None Include="train_model.py" />
   </ItemGroup>

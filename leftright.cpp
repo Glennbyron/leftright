@@ -65,12 +65,12 @@ void saveToCSV(const std::map<Party, int>& scores, Party prediction, Party userL
         return;
     }
 
-	// Write header if file is new
+    // Write header if file is new
     if (!exists) {
         file << "Democrat,Republican,Libertarian,Green,Prediction,UserLabel\n";
     }
 
-	// Write scores and labels
+    // Write scores and labels
     file << scores.at(DEMOCRAT) << ","
         << scores.at(REPUBLICAN) << ","
         << scores.at(LIBERTARIAN) << ","
@@ -186,7 +186,7 @@ int main() {
         }
     };
 
-	// Initialize party scores
+    // Initialize party scores
     std::map<Party, int> partyScores = {
         {DEMOCRAT, 0},
         {REPUBLICAN, 0},
@@ -194,13 +194,13 @@ int main() {
         {GREEN, 0}
     };
 
-	// Conduct survey
+    // Conduct survey
     for (size_t i = 0; i < survey.size(); ++i) {
         displayQuestion(survey[i], i);
         int choice;
         std::cin >> choice;
 
-		// Validate input
+        // Validate input
         if (std::cin.fail() || choice < 1 || choice > static_cast<int>(survey[i].options.size())) {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
@@ -208,31 +208,28 @@ int main() {
             continue;
         }
 
-	
+
         const auto& scores = survey[i].optionScores[choice - 1];
         for (const auto& pair : scores) {
             partyScores[pair.first] += pair.second;
         }
 
-		// Intermediate prediction
-        Party guess = predictParty(partyScores);
-        std::cout << "Current guess: " << partyToString(guess) << "\n";
     }
 
-	// Final prediction
+    // Final prediction
     Party finalGuess = predictParty(partyScores);
-    std::cout << "\nFinal prediction: " << partyToString(finalGuess) << "\n";
 
     // Ask user to label themselves
     std::cout << "\n**********This labeled response will serve as training data the model.**********";
     std::cout << "\nHow do you currently identify politically?\n";
     std::cout << "1. Democrat\n2. Republican\n3. Libertarian\n4. Green\n5. Other / Prefer not to say\n";
     std::cout << "Your choice (1-5): ";
-    std::cout << "****************************************************************************************\n";
     int labelChoice;
     std::cin >> labelChoice;
+    std::cout << "****************************************************************************************\n";
+  
 
-	// Mapping user input to Party 
+    // Mapping user input to Party 
     Party userLabel = UNKNOWN;
     switch (labelChoice) {
     case 1: userLabel = DEMOCRAT; break;
@@ -242,10 +239,32 @@ int main() {
     default: userLabel = UNKNOWN; break;
     }
 
-	// Save to CSV File
+    // Save to CSV File
     saveToCSV(partyScores, finalGuess, userLabel, "responses.csv");
 
-	// END of my program
+    // END of my program
     std::cout << "\nThank you! Your responses have been recorded in 'responses.csv'.\n";
+	std::cout << "\n";
+   
+   
+
+    // Call  ML model
+    system("python predict.py");
+
+    // Read prediction
+    std::ifstream resultFile("prediction.txt");
+    std::string prediction;
+    if (resultFile.is_open()) {
+        std::getline(resultFile, prediction);
+        std::cout << "\nMachine Learning Prediction: " << prediction << "\n";
+        resultFile.close();
+    }
+    else {
+        std::cerr << "Failed to read prediction from prediction.txt\n";
+    }
+    std::cout << "\n";
+
+    // Call retrain the model
+    system("python train_model.py");
     return 0;
 }

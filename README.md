@@ -27,15 +27,6 @@ You can install the required libraries using pip:
 pip install pandas scikit-learn
 
 
-
-Open a terminal and navigate to the directory where the script is located. Then run the script using the following command:
-
-Eample: C:\Users\gbyron\source\repos\leftright
-
-python train_model.py
-
-This will execute the script and you should see output indicating the progress of the model training and evaluation.
-
 # Machine Learning Model Training and Evaluation
 
 This repository contains a Python script that trains and evaluates a machine learning model using the RandomForestClassifier from the scikit-learn library.
